@@ -1,8 +1,8 @@
 /*****************************************************************************
-Filename: main.c
+Filename    : main.c
 Author      : Terrantsh (tanshanhe@foxmail.com)
-Date        : 2018-8-27 10:12:46
-Description :基本实现了RSA2048加密解密的各项功能，并能够进行最大2048位的加密操作
+Date        : 2018-8-27 14:25:45
+Description : 基本实现了RSA2048加密解密的各项功能，并能够进行最大2048位的加密操作
 *****************************************************************************/
 
 #include <stdio.h>
@@ -91,7 +91,7 @@ static int test1(void)
     uint8_t msg[256];
     unsigned int outputLen, inputLen, msg_len;
 
-    printf("hello world!\n");
+    printf("RSA encryption method begin!\n");
 
     ret = rsa_generate_keys(&pk, &sk, 512);
     if(ret == 0) {
