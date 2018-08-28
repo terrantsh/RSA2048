@@ -1,10 +1,9 @@
 /*****************************************************************************
-Filename    : bigInt.c
-Author      : Terrantsh (tanshanhe@foxmail.com)
-Date        : 2018-8-27 10:12:46
-Description : 完成各个数学符号使用函数表示的方法
+Filename: bignum.c
+Author  : Chuck Li (lch0821@foxmail.com)
+Date    : 2018-01-19 12:38:46
+Description:
 *****************************************************************************/
-
 #include <string.h>
 #include "bignum.h"
 
