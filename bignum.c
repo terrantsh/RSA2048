@@ -1,8 +1,8 @@
 /*****************************************************************************
-Filename: bignum.c
-Author  : Chuck Li (lch0821@foxmail.com)
-Date    : 2018-01-19 12:38:46
-Description:
+Filename    : bignum.c
+Author      : terrantsh(tanshanhe@foxmail.com)
+Date        : 2018-8-28 10:30:02
+Description : 生成大质数
 *****************************************************************************/
 #include <string.h>
 #include "bignum.h"
