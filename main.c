@@ -138,8 +138,6 @@ static int test1(void)
     if(ret == 0) {
         print_array("Private_key_decrypt", msg, msg_len);
         printf("\n");
-//        printf("DEC: %s\n", msg);
-        printf("\n");
     } else {
         printf("rsa_private_decrypt, ret: %04X\n", ret);
         return -1;
@@ -157,11 +155,10 @@ static int test1(void)
     }
     printf("\n");
 
-    printf("public_key_decrypt\n");
+    printf("Public_key_decrypt\n");
     ret = rsa_public_decrypt(msg, &msg_len, output, outputLen, &pk); //公钥解密
     if(ret == 0) {
         print_array("Public_key_decrypt", msg, msg_len);
-//        printf("DEC: %s\n", msg);
     } else {
         printf("rsa_public_decrypt, ret: %04X\n", ret);
         return -1;
@@ -193,7 +190,6 @@ int main(int argc, char const *argv[])
     finish = clock();
     duration = (double)(finish - start) / CLOCKS_PER_SEC;
     printf( "%f seconds\n", duration );
-
-
+    
     return 0;
 }
