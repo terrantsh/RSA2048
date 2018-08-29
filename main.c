@@ -107,12 +107,12 @@ static int test1(void)
     sk.bits = KEY_M_BITS;
     memcpy(&sk.modulus         [RSA_MAX_MODULUS_LEN-sizeof(key_m)],  key_m,  sizeof(key_m));
     memcpy(&sk.public_exponet  [RSA_MAX_MODULUS_LEN-sizeof(key_e)],  key_e,  sizeof(key_e));
-    memcpy(&sk.exponent        [RSA_MAX_MODULUS_LEN-sizeof(key_pe)], key_pe, sizeof(key_pe));
-    memcpy(&sk.prime1          [RSA_MAX_PRIME_LEN-sizeof(key_p1)],   key_p1, sizeof(key_p1));
-    memcpy(&sk.prime2          [RSA_MAX_PRIME_LEN-sizeof(key_p2)],   key_p2, sizeof(key_p2));
-    memcpy(&sk.prime_exponent1 [RSA_MAX_PRIME_LEN-sizeof(key_e1)],   key_e1, sizeof(key_e1));
-    memcpy(&sk.prime_exponent2 [RSA_MAX_PRIME_LEN-sizeof(key_e2)],   key_e2, sizeof(key_e2));
-    memcpy(&sk.coefficient     [RSA_MAX_PRIME_LEN-sizeof(key_c)],    key_c,  sizeof(key_c));
+//    memcpy(&sk.exponent        [RSA_MAX_MODULUS_LEN-sizeof(key_pe)], key_pe, sizeof(key_pe));
+//    memcpy(&sk.prime1          [RSA_MAX_PRIME_LEN-sizeof(key_p1)],   key_p1, sizeof(key_p1));
+//    memcpy(&sk.prime2          [RSA_MAX_PRIME_LEN-sizeof(key_p2)],   key_p2, sizeof(key_p2));
+//    memcpy(&sk.prime_exponent1 [RSA_MAX_PRIME_LEN-sizeof(key_e1)],   key_e1, sizeof(key_e1));
+//    memcpy(&sk.prime_exponent2 [RSA_MAX_PRIME_LEN-sizeof(key_e2)],   key_e2, sizeof(key_e2));
+//    memcpy(&sk.coefficient     [RSA_MAX_PRIME_LEN-sizeof(key_c)],    key_c,  sizeof(key_c));
 
 //    print_pk(&pk);
 //    printf("\n");
@@ -138,6 +138,8 @@ static int test1(void)
     if(ret == 0) {
         print_array("Private_key_decrypt", msg, msg_len);
         printf("\n");
+//        printf("DEC: %s\n", msg);
+        printf("\n");
     } else {
         printf("rsa_private_decrypt, ret: %04X\n", ret);
         return -1;
@@ -155,10 +157,11 @@ static int test1(void)
     }
     printf("\n");
 
-    printf("Public_key_decrypt\n");
+    printf("public_key_decrypt\n");
     ret = rsa_public_decrypt(msg, &msg_len, output, outputLen, &pk); //公钥解密
     if(ret == 0) {
         print_array("Public_key_decrypt", msg, msg_len);
+//        printf("DEC: %s\n", msg);
     } else {
         printf("rsa_public_decrypt, ret: %04X\n", ret);
         return -1;
@@ -190,6 +193,7 @@ int main(int argc, char const *argv[])
     finish = clock();
     duration = (double)(finish - start) / CLOCKS_PER_SEC;
     printf( "%f seconds\n", duration );
-    
+
+
     return 0;
 }
