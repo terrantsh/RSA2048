@@ -120,6 +120,11 @@ static int test1(void)
 //    print_sk(&sk);
 //    printf("\n");
 
+    print_pk(&pk);
+    printf("\n");
+    print_sk(&sk);
+    printf("\n");
+
     inputLen = strlen((const char *)input);
     print_array("Input_message", input, inputLen);
     printf("\n");
