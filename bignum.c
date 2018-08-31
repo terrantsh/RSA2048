@@ -1,13 +1,12 @@
 /*****************************************************************************
 Filename    : bignum.c
-Author      : terrantsh(tanshanhe@foxmail.com)
-Date        : 2018-8-28 10:30:02
-Description : 生成大质数
+Author      : Terrantsh (tanshanhe@foxmail.com)
+Date        : 2018-8-31 10:31:23
+Description : 整理数据
 *****************************************************************************/
 #include <string.h>
 #include "bignum.h"
 
-extern void print_bn(char *TAG, bn_t *bn, uint32_t bn_size);
 static bn_t bn_sub_digit_mul(bn_t *a, bn_t *b, bn_t c, bn_t *d, uint32_t digits);
 static bn_t bn_add_digit_mul(bn_t *a, bn_t *b, bn_t c, bn_t *d, uint32_t digits);
 static uint32_t bn_digit_bits(bn_t a);
@@ -62,16 +61,6 @@ void bn_assign_zero(bn_t *a, uint32_t digits)
     for(i=0; i<digits; i++) {
         a[i] = 0;
     }
-}
-
-void bn_assign_2exp(bn_t *a, uint32_t b, uint32_t digits)
-{
-    bn_assign_zero(a, digits);
-    if(b >= (digits * BN_DIGIT_BITS)) {
-        return;     // Out of range
-    }
-
-    a[b/BN_DIGIT_BITS] = (bn_t)1 << (b % BN_DIGIT_BITS);
 }
 
 bn_t bn_add(bn_t *a, bn_t *b, bn_t *c, uint32_t digits)
@@ -223,10 +212,7 @@ void bn_mod(bn_t *a, bn_t *b, uint32_t bdigits, bn_t *c, uint32_t cdigits)
 {
     bn_t t[2*BN_MAX_DIGITS] = {0};
 
-    // print_bn("b", b, bdigits);
-    // print_bn("c", c, cdigits);
     bn_div(t, a, b, bdigits, c, cdigits);
-    // print_bn("t", t, 2*BN_MAX_DIGITS);
 
     // Clear potentially sensitive information
     memset((uint8_t *)t, 0, sizeof(t));
@@ -285,66 +271,6 @@ void bn_mod_exp(bn_t *a, bn_t *b, bn_t *c, uint32_t cdigits, bn_t *d, uint32_t d
     memset((uint8_t *)t, 0, sizeof(t));
 }
 
-void bn_mod_inv(bn_t *a, bn_t *b, bn_t *c, uint32_t digits)
-{
-    bn_t q[BN_MAX_DIGITS], t1[BN_MAX_DIGITS], t3[BN_MAX_DIGITS], w[2*BN_MAX_DIGITS];
-    bn_t u1[BN_MAX_DIGITS], u3[BN_MAX_DIGITS], v1[BN_MAX_DIGITS], v3[BN_MAX_DIGITS];
-    int u1_sign;
-
-    BN_ASSIGN_DIGIT(u1, 1, digits);
-    bn_assign_zero(v1, digits);
-    bn_assign(u3, b, digits);
-    bn_assign(v3, c, digits);
-    u1_sign = 1;
-
-    while(!bn_is_zero(v3, digits)) {
-        bn_div(q, t3, u3, digits, v3, digits);
-        bn_mul(w, q, v1, digits);
-        bn_add(t1, u1, w, digits);
-        bn_assign(u1, v1, digits);
-        bn_assign(v1, t1, digits);
-        bn_assign(u3, v3, digits);
-        bn_assign(v3, t3, digits);
-        u1_sign = -u1_sign;
-    }
-
-    if(u1_sign < 0) {
-        bn_sub(a, c, u1, digits);
-    } else {
-        bn_assign(a, u1, digits);
-    }
-
-    // Clear potentially sensitive information
-    memset((uint8_t *)q, 0, sizeof(q));
-    memset((uint8_t *)t1, 0, sizeof(t1));
-    memset((uint8_t *)t3, 0, sizeof(t3));
-    memset((uint8_t *)u1, 0, sizeof(u1));
-    memset((uint8_t *)u3, 0, sizeof(u3));
-    memset((uint8_t *)v1, 0, sizeof(v1));
-    memset((uint8_t *)v3, 0, sizeof(v3));
-    memset((uint8_t *)w, 0, sizeof(w));
-}
-
-void bn_gcd(bn_t *a, bn_t *b, bn_t *c, uint32_t digits)
-{
-    bn_t t[BN_MAX_DIGITS], u[BN_MAX_DIGITS], v[BN_MAX_DIGITS];
-
-    bn_assign(u, b, digits);
-    bn_assign(v, c, digits);
-
-    while(!bn_is_zero(v, digits)) {
-        bn_mod(t, u, digits, v, digits);
-        bn_assign(u, v, digits);
-        bn_assign(v, t, digits);
-    }
-    bn_assign(a, u, digits);
-
-    // Clear potentially sensitive information
-    memset((uint8_t *)t, 0, sizeof(t));
-    memset((uint8_t *)u, 0, sizeof(u));
-    memset((uint8_t *)v, 0, sizeof(v));
-}
-
 int bn_cmp(bn_t *a, bn_t *b, uint32_t digits)
 {
     int i;
@@ -354,26 +280,6 @@ int bn_cmp(bn_t *a, bn_t *b, uint32_t digits)
     }
 
     return 0;
-}
-
-int bn_is_zero(bn_t *a, uint32_t digits)
-{
-    uint32_t i;
-    for(i=0; i<digits; i++) {
-        if(a[i]) {
-            return 0;
-        }
-    }
-
-    return 1;
-}
-
-uint32_t bn_bits(bn_t *a, uint32_t digits)
-{
-    if((digits = bn_digits(a, digits)) == 0) {
-        return 0;
-    }
-    return ((digits - 1) * BN_DIGIT_BITS + bn_digit_bits(a[digits-1]));
 }
 
 uint32_t bn_digits(bn_t *a, uint32_t digits)

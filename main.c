@@ -1,42 +1,16 @@
 /*****************************************************************************
 Filename    : main.c
 Author      : Terrantsh (tanshanhe@foxmail.com)
-Date        : 2018-8-28 10:29:35
+Date        : 2018-8-31 10:31:23
 Description : 基本实现了RSA2048加密解密的各项功能，并能够进行最大2048位的加密操作
 *****************************************************************************/
-
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
 
-#include "bignum.h"
 #include "rsa.h"
 #include "keys.h"
-
-#define BUF_SIZE 2048
-
-// 打印bn
-void print_bn(char *TAG, bn_t *bn, uint32_t bn_size)
-{
-    uint8_t buf[BUF_SIZE];
-    int i;
-
-    memset(buf, 0, BUF_SIZE);
-    bn_encode(buf, BUF_SIZE, bn, bn_size);
-    printf("%s[%d]: ", TAG, bn_size);
-
-    i = 0;
-    while(buf[i] == 0) {
-        i++;
-    }
-
-    for(; i<BUF_SIZE; i++) {
-        printf("%02X", buf[i]);
-    }
-
-    printf("\n");
-}
 
 // 打印bn数组
 void print_bn_arr(char *TAG, uint8_t *array, int len)
@@ -88,7 +62,7 @@ void print_sk(rsa_sk_t *sk)
 }
 
 
-static int test1(void)
+static int RSA2048(void)
 {
     int ret;
     rsa_pk_t pk = {0};
@@ -96,7 +70,6 @@ static int test1(void)
     uint8_t output[256];
     uint8_t input [256] = {0x21,0x55,0x54};           //需要进行加密的内容
     unsigned char msg [256];
-
     uint32_t outputLen, msg_len;
     uint8_t inputLen;
 
@@ -114,11 +87,6 @@ static int test1(void)
     memcpy(&sk.prime_exponent1 [RSA_MAX_PRIME_LEN-sizeof(key_e1)],   key_e1, sizeof(key_e1));
     memcpy(&sk.prime_exponent2 [RSA_MAX_PRIME_LEN-sizeof(key_e2)],   key_e2, sizeof(key_e2));
     memcpy(&sk.coefficient     [RSA_MAX_PRIME_LEN-sizeof(key_c)],    key_c,  sizeof(key_c));
-
-//    print_pk(&pk);
-//    printf("\n");
-//    print_sk(&sk);
-//    printf("\n");
 
     print_pk(&pk);
     printf("\n");
@@ -145,7 +113,6 @@ static int test1(void)
     ret = rsa_private_decrypt(msg, &msg_len, output, outputLen, &sk);
     if(ret == 0) {
         print_array("Private_key_decrypt", msg, msg_len);
-//        printf("DEC: %s\n", msg);
     } else {
         printf("rsa_private_decrypt, ret: %04X\n", ret);
         return -1;
@@ -169,25 +136,11 @@ static int test1(void)
     ret = rsa_public_decrypt(msg, &msg_len, output, outputLen, &pk); //公钥解密
     if(ret == 0) {
         print_array("Public_key_decrypt", msg, msg_len);
-//        printf("DEC: %s\n", msg);
     } else {
         printf("rsa_public_decrypt, ret: %04X\n", ret);
         return -1;
     }
-
     return 0;
-}
-
-static void write_sk(char *file, rsa_sk_t *sk)
-{
-    FILE *fp;
-    fp = fopen(file, "w");
-    if(fp == NULL) {
-        printf("CAN NOT OPEN FILE\n");
-        return;
-    }
-    fwrite((uint8_t *)sk, 1, sizeof(rsa_sk_t), fp);
-    fclose(fp);
 }
 
 int main(int argc, char const *argv[])
@@ -195,13 +148,12 @@ int main(int argc, char const *argv[])
     clock_t start, finish;
     double  duration;
 
-    //使用自生成的密钥对进行加密解密操作
+    // 使用给出的密钥对进行加密解密操作
     start = clock();
-    test1();
+    RSA2048();
     finish = clock();
-    duration = (double)(finish - start) / CLOCKS_PER_SEC;
+    duration = (double)(finish - start) / CLOCKS_PER_SEC;   // 打印加解密过程持续的时间
     printf( "%f seconds\n", duration );
-
 
     return 0;
 }
