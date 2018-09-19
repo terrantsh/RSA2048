@@ -58,7 +58,6 @@ static int RSA2048(void){
     // private key decrypt
     ret = rsa_private_decrypt(msg, &msg_len, output, outputLen, &sk);
     if(ret == 0) {
-        // private key decryption succeed
     } else {
         return -1;
     }
@@ -66,7 +65,6 @@ static int RSA2048(void){
     // private key encrypt
     ret = rsa_private_encrypt(output, &outputLen, input, inputLen, &sk);
     if(ret == 0) {
-        // private key encryption succeed
     } else {
         return -1;
     }
@@ -74,7 +72,6 @@ static int RSA2048(void){
     // public key decrypted
     ret = rsa_public_decrypt(msg, &msg_len, output, outputLen, &pk);
     if(ret == 0) {
-        // public key decryption  succeed
     } else {
         return -1;
     }
