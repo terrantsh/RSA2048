@@ -1,8 +1,14 @@
+/*****************************************************************************
+Filename    : bignum.c
+Author      : Terrantsh (tanshanhe@foxmail.com)
+Date        : 2018-8-31 10:31:23
+Description : 整理数据
+*****************************************************************************/
 #include <string.h>
 #include "bignum.h"
 
-static bn_t bn_sub_digit_mul (bn_t *a, bn_t *b, bn_t c, bn_t *d, uint32_t digits);
-static bn_t bn_add_digit_mul (bn_t *a, bn_t *b, bn_t c, bn_t *d, uint32_t digits);
+static bn_t bn_sub_digit_mul(bn_t *a, bn_t *b, bn_t c, bn_t *d, uint32_t digits);
+static bn_t bn_add_digit_mul(bn_t *a, bn_t *b, bn_t c, bn_t *d, uint32_t digits);
 static uint32_t bn_digit_bits(bn_t a);
 
 void bn_decode(bn_t *bn, uint32_t digits, uint8_t *hexarr, uint32_t size)
@@ -145,11 +151,13 @@ void bn_div(bn_t *a, bn_t *b, bn_t *c, uint32_t cdigits, bn_t *d, uint32_t ddigi
         }
 
         cc[i+dddigits] -= bn_sub_digit_mul(&cc[i], &cc[i], ai, dd, dddigits);
+        // printf("cc[%d]: %08X\n", i, cc[i+dddigits]);
         while(cc[i+dddigits] || (bn_cmp(&cc[i], dd, dddigits) >= 0)) {
             ai++;
             cc[i+dddigits] -= bn_sub(&cc[i], &cc[i], dd, dddigits);
         }
         a[i] = ai;
+        // printf("ai[%d]: %08X\n", i, ai);
     }
 
     bn_assign_zero(b, ddigits);
@@ -203,6 +211,7 @@ bn_t bn_shift_r(bn_t *a, bn_t *b, uint32_t c, uint32_t digits)
 void bn_mod(bn_t *a, bn_t *b, uint32_t bdigits, bn_t *c, uint32_t cdigits)
 {
     bn_t t[2*BN_MAX_DIGITS] = {0};
+
     bn_div(t, a, b, bdigits, c, cdigits);
 
     // Clear potentially sensitive information
