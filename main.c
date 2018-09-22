@@ -46,35 +46,17 @@ static int RSA2048(void){
     inputLen = strlen((const char*)input);
 
     // public key encrypt
-    ret = rsa_public_encrypt(output, &outputLen, input, inputLen, &pk);
-    if(ret == 0){
-        // public key encryption succeed
-    }else{
-        // come to nothing ret = 0x1001 -> ERR_WRONG_DATA
-        //                 ret = 0x1002 -> ERR_WRONG_LEN
-        return -1;
-    }
+    rsa_public_encrypt(output, &outputLen, input, inputLen, &pk);
 
     // private key decrypt
-    ret = rsa_private_decrypt(msg, &msg_len, output, outputLen, &sk);
-    if(ret == 0) {
-    } else {
-        return -1;
-    }
+    rsa_private_decrypt(msg, &msg_len, output, outputLen, &sk);
 
     // private key encrypt
-    ret = rsa_private_encrypt(output, &outputLen, input, inputLen, &sk);
-    if(ret == 0) {
-    } else {
-        return -1;
-    }
+    rsa_private_encrypt(output, &outputLen, input, inputLen, &sk);
 
     // public key decrypted
-    ret = rsa_public_decrypt(msg, &msg_len, output, outputLen, &pk);
-    if(ret == 0) {
-    } else {
-        return -1;
-    }
+    rsa_public_decrypt(msg, &msg_len, output, outputLen, &pk);
+
     return 0;
 }
 /* RSA2048 function ended */
