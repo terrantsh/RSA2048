@@ -16,6 +16,7 @@ void generate_rand(uint8_t *block, uint32_t block_len)
 {
     uint32_t i;
     for(i=0; i<block_len; i++) {
+        srand ((unsigned)time(NULL));
         block[i] = rand();
     }
 }
